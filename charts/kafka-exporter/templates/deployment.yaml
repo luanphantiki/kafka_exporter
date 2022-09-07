@@ -32,7 +32,7 @@ spec:
               "metrics": {{ .Values.datadog.metrics | toJson | nindent 16 -}}
             }
            ]
-      {{- end }}    
+      {{- end }}
       labels:
         app.kubernetes.io/name: {{ include "kafka-exporter.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -45,6 +45,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
+            {{- if .Values.kafkaExporter.kafka.groupExclude}}
+            - --group.exclude={{ .Values.kafkaExporter.kafka.groupExclude }}
+            {{- end }}
             {{- if .Values.kafkaExporter}}
             {{- range .Values.kafkaExporter.kafka.servers }}
             - "--kafka.server={{ . }}"
