@@ -1,0 +1,21 @@
+FROM golang:1.19 AS builder
+
+RUN mkdir /build
+WORKDIR /build
+
+RUN echo $GOPATH
+RUN go install github.com/prometheus/promu@v0.13.0
+
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+COPY . .
+RUN /go/bin/promu build \
+        --prefix .
+
+FROM quay.io/prometheus/busybox:latest
+WORKDIR /
+COPY --from=builder /build/kafka_exporter /bin/kafka_exporter
+ENTRYPOINT [ "/bin/kafka_exporter" ]
