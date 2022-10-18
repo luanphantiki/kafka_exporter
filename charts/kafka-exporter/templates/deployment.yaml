@@ -45,6 +45,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
+            {{- if .Values.kafkaExporter.kafka.topicExclude}}
+            - --topic.exclude={{ .Values.kafkaExporter.kafka.topicExclude }}
+            {{- end }}
             {{- if .Values.kafkaExporter.kafka.groupExclude}}
             - --group.exclude={{ .Values.kafkaExporter.kafka.groupExclude }}
             {{- end }}
