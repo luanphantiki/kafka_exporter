@@ -21,6 +21,13 @@ kafkaExporter:
     servers: []
       # - kafka:9092
     # version: "1.0.0"
+    #
+    # consumer groups to be excluded while collecting
+    # groupExclude: ".*"
+
+    # topics  be excluded while collecting
+    # topicExclude: ".*"
+    #
 
   sasl:
     enabled: false
